@@ -1,33 +1,28 @@
 #!/usr/bin/awk -f
 
-# Comprobamos que se proporcionen los archivos de datos y stopwords como argumentos
 BEGIN {
-    if (ARGC < 3) {
-        print "Uso: awk -f script.awk data.dat stopwords.txt > resultado.json"
-        exit 1
-    }
-
-    # Cargamos los stopwords en un array
-    stopwords_file = ARGV[ARGC - 1]
+    # Cargar stopwords en un array
+    stopwords_file = ARGV[ARGC - 1] # Ruta de los stopwords
     while ((getline < stopwords_file) > 0) {
         stopwords[$1] = 1
     }
     close(stopwords_file)
-    # Inicializamos el objeto JSON
+
+    # Inicializar un archivo JSON
     printf "{\n" > "resultado.json"
 }
 
 {
     # Procesamos cada palabra y número en la línea
     for (i = 1; i <= NF; i++) {
-        elemento = tolower($i) # Convertimos a minúsculas
-        # Verificamos si el elemento no está en la lista de stopwords
+        elemento = tolower($i) # Conversion de cada elemento a minúsculas
+        # ¿El elemento actual NO está en la lista de stopwords y contiene solocaracteres alfabétocps y/o dígitos? 
         if (!(elemento in stopwords) && elemento ~ /^[a-zA-Z0-9]+$/) {
-            # Inicializamos la entrada de elemento como un array si no existe
+            # Si el elemento no existe en la lista, la agregamos
             if (!(elemento in lista_invertida)) {
                 lista_invertida[elemento] = ""
             }
-            # Verificamos si la página o número no está en la lista del elemento actual
+            # Si el elemento no existe en la lista, la agregamos
             if (index(lista_invertida[elemento], NR) == 0) {
                 if (lista_invertida[elemento] != "") {
                     lista_invertida[elemento] = lista_invertida[elemento] ", "
@@ -39,10 +34,10 @@ BEGIN {
 }
 
 END {
-    # Generamos el archivo JSON
+    # Generar el archivo JSON
     primero = 1
     for (elemento in lista_invertida) {
-        sub(/, $/, "", lista_invertida[elemento]) # Eliminamos la coma y el espacio final
+        sub(/, $/, "", lista_invertida[elemento]) # Elimina coma y espacio final
         if (!primero) {
             printf ",\n" > "resultado.json"
         }
@@ -50,14 +45,9 @@ END {
         primero = 0
     }
 
-    # Cerramos el objeto JSON
+    # Cerrar el archivo JSON
     printf "\n}\n" > "resultado.json"
-    print "Proceso completado. El resultado se ha guardado en 'resultado.json'."
 }
 
-
-
-
-
-
-# awk -f procesar.awk  data.dat stopwords.txt > resultado.txt
+# Ejecutable
+# awk -f procesar.awk  data.dat stopwords.txt

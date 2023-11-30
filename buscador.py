@@ -1,6 +1,6 @@
 import json
 
-# Cargar el índice invertido desde un archivo JSON
+# Cargar índice invertido
 with open('resultado.json', 'r') as file:
     indice_invertido = json.load(file)
 
@@ -11,11 +11,15 @@ def buscar(query, indice_invertido):
 
     for palabra in palabras:
         palabra = palabra.lower()  # Convertir a minúsculas
+        # ¿La palabra actual está en el índice invertido?
         if palabra in indice_invertido:
+            # Obtener la lista de documentos donde aparece la palabra
             lista_documentos = indice_invertido[palabra]
+            # ¿La variable documentos_coincidentes es nula?
             if documentos_coincidentes is None:
                 documentos_coincidentes = set(lista_documentos)
             else:
+                # ¿se intersectan los conjuntos documentos_coincidentes y lista_documentos?
                 documentos_coincidentes = documentos_coincidentes.intersection(
                     lista_documentos)
 
@@ -26,17 +30,19 @@ def buscar(query, indice_invertido):
 with open('consultas.txt', 'r') as consultas_file:
     consultas = consultas_file.readlines()
 
-# Procesar consultas y almacenar resultados en un archivo
 with open('resultados_consultas.txt', 'w') as resultados_file:
     for consulta in consultas:
-        consulta = consulta.strip()  # Eliminar espacios en blanco alrededor
+        consulta = consulta.strip()  # Porsiacaso eliminar espacios en blanco
+        # Buscar en el índice invertido
         resultados = buscar(consulta, indice_invertido)
-        if resultados is not None:
+        # ¿Se encontraron resultados?
+        if resultados is not None:  # si hay resultados
+            # Escribimos los resultados en el archivo  y los documentos donde aparece la consulta
             resultados_file.write(
                 f"Resultados para la consulta '{consulta}':\n")
             for doc in resultados:
                 resultados_file.write(f"Documento {doc}\n")
-        else:
+        else:  # no hay resultados
             resultados_file.write(
                 f"No se encontraron resultados para la consulta '{consulta}'.\n")
 
