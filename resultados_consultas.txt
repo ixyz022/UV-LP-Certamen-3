@@ -1,0 +1,21 @@
+Resultados para la consulta 'random words':
+Documento 39
+Resultados para la consulta 'maximum lines text':
+Documento 34
+Documento 5
+Documento 8
+Documento 10
+Documento 20
+Documento 24
+Documento 25
+Resultados para la consulta 'generate generate text':
+Documento 34
+Documento 5
+Documento 8
+Documento 10
+Documento 20
+Documento 24
+Documento 25
+Resultados para la consulta 'lines of random':
+Documento 39
+No se encontraron resultados para la consulta 'lines maximum'.

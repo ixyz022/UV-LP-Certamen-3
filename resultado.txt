@@ -1,0 +1,1 @@
+Proceso completado. El resultado se ha guardado en 'resultado.json'.
